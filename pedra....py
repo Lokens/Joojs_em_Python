@@ -1,7 +1,8 @@
 #MATHEUS SLAMA RIBAS
-#ALFA 1.0
+#Versão Beta
 
 import random
+import cv2
 
 print('#'*56)
 
@@ -22,17 +23,25 @@ while(1):
 
 
     lista=['Tesoura','Papel','Pedra','Lagarto','Spock']
+
     jogador = int(input())
     if jogador < 0 or jogador >6 :
         print('joga direito caralho')
     elif jogador == 5:
         print('https://www.youtube.com/watch?v=abQj0pQkSOY')
 
+        #carregar a imagen da regra
+        ImagemCarregada= cv2.imread("pedra.png")
+        cv2.imshow("Regra",ImagemCarregada)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
 
     elif jogador == 6 :
         break
     else:
         maquina=random.randrange(0,4)
+        print ("\nVc jogou: ",lista[jogador])
         print ("Maquina jogou: ",lista[maquina],'\n')
 
         if jogador == 0 and (maquina == 1 or maquina == 3):
@@ -49,6 +58,9 @@ while(1):
 
         elif jogador == 4 and (maquina == 0 or maquina == 2):
             print (f'É Spock nesse carai mermao \n {lista[jogador]} ganhou!!!')
+
+        elif jogador == maquina :
+            print("EMPATOU!!! ou seja tu se fudeu")
 
         else :
             print("Tu Perdeu OTARIO")
