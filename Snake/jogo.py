@@ -1,19 +1,19 @@
-#versão Beta 1.0
+#versão Beta 2.0
 
 #jogo do trabalho do emilio para estrutura de dados 2 
 #espero que esteja tudo certo
 
 
-import pygame,random
+import pygame,random,time
 from pygame.locals import *
 
 
 pygame.init()
 
 #altuta e janelinha da tela
-Altura = 600
-Largura =  600
-screen = pygame.display.set_mode ((Altura , Largura))
+Largura = 720
+Altura =  600
+screen = pygame.display.set_mode ((Largura, Altura))
 
 #nome da tela
 pygame.display.set_caption('Cobrinha')
@@ -21,8 +21,8 @@ pygame.display.set_caption('Cobrinha')
 #função pra retornar uma posição por 10
 #exemplo pra 209 -> 210
 def on_grid_random():
-	X = random.randint(0,590)
-	Y = random.randint(0,590)
+	X = random.randint(10,710)
+	Y = random.randint(0,520)
 	return (X//10 * 10, Y//10 *10)
 	
 
@@ -47,8 +47,7 @@ snake_skin.fill(CorDaCobra)
 Direção = RIGHT
 
 Velocidade = 10
-if Velocidade < 10:
-	Velocidade = 10
+
 
 print (Velocidade)
 #criação da comida
@@ -66,6 +65,19 @@ comida2 = pygame.Surface((10,10))
 comida2.fill(CorDaComida2)
 
 
+
+#pontuação
+
+Pontos = 0
+
+#tempo
+
+Tempo = time.time()
+
+
+#borda
+fundoJanela=pygame.display.set_mode((Largura,Altura),0,32)
+
 #fps
 FPS = pygame.time.Clock()
 
@@ -76,9 +88,12 @@ while True :
 	for event in pygame.event.get():
 		if event.type == QUIT:
 			pygame.quit()
+			
+		#<ESC> para sair do jogo
+		if event.type == KEYUP:	
+			if event.key == K_ESCAPE:
+				pygame.quit()
 	
-	
-
 			
 	#teclas de movimento 
 		if event.type == KEYDOWN:
@@ -90,6 +105,16 @@ while True :
 				Direção = LEFT
 			if event.key == K_RIGHT:
 				Direção = RIGHT
+			
+			#futura pausa
+			if event.key == K_p:
+				time.sleep(5)
+				print ("Foi?")
+			
+			
+		
+	
+	
 	
 	if Velocidade < 10:
 		Velocidade = 10
@@ -105,6 +130,8 @@ while True :
 		#não importa ser 0,0 pq ela vai pegar a posição q o rabo tinha 
 		snake.append((0,0))
 		Velocidade = Velocidade + 5
+		Pontos += 25 
+		
 		
 	
 	#colisao da comida q diminui a velocida
@@ -113,8 +140,9 @@ while True :
 		#novo quadrado da cobra 
 		#não importa ser 0,0 pq ela vai pegar a posição q o rabo tinha 
 		#snake.append((0,0))
-		#Velocidade = Velocidade - 15
+		Velocidade = 15
 		snake.pop(len(snake)-1)
+		Pontos -= 50
 		
 	#colisao para morrer encostando, incacabada	
 	#if snake.count(cabeca)>0:
@@ -128,7 +156,7 @@ while True :
 		snake[i] = (snake[i-1][0], snake[i-1][1])
 			
 			
-			
+		
 	#direção da cobra 
 	#sempre vai se mecher pra onde ta "olhando"
 	if Direção == UP :
@@ -142,16 +170,50 @@ while True :
 	
 	
 	
+	
+	
+	
+
 	screen.fill((0,0,0))
 	
 	#comida na tela 
 	screen.blit(comida, Pos_Comida)
 	#comida2 na tela 
-	screen.blit(comida2, Pos_Comida2)
+	
+	#if pra pontuação minima para aparecer a comida vermelha 
+	if Pontos > 50 :
+		screen.blit(comida2, Pos_Comida2)
+	
+	#placar
+	#escolhe a cor do que vai ser escrito
+	font_color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+	
+	#estilo e tamanho da letra
+	font = pygame.font.Font(None, 54)
+	
+	#oq vai ser escrito e como 
+	text = font.render(str("PONTOS : "),True ,font_color)
+	text_pontos = font.render (str(Pontos), True, font_color)
+	text_tempo = font.render (str("TEMPO : "),True, font_color)
+	text_tempo_cont = font.render (str(Tempo),True,font_color)
+	
+	#coloca o letras na tela 
+	screen.blit(text, (50 , 40))
+	screen.blit(text_pontos,(250,40))
+	screen.blit(text_tempo,(350,40))
+	screen.blit(text_tempo_cont,(400,40))
+	
+	#pygame.draw.rect(fundoJanela,AZUL,Rect([10,120],[420,380]),1)
+	#screen.blit(fundoJanela,font_color([10,120],[420,380],1))
+	
 	
 	
 	for pos in snake :
 		screen.blit(snake_skin,pos)
+			
+			
+			
+			
 			
 	pygame.display.update()
 	
