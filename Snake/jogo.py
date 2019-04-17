@@ -53,7 +53,8 @@ print (Velocidade)
 #criação da comida
 Pos_Comida = on_grid_random()
 CorDaComida = (0,255,0)						
-						#taanho da coisa
+
+					#taanho da coisa
 comida = pygame.Surface((10,10))
 
 comida.fill(CorDaComida)
@@ -142,7 +143,7 @@ while True :
 		#snake.append((0,0))
 		Velocidade = 15
 		snake.pop(len(snake)-1)
-		Pontos -= 50
+		Pontos  = Pontos // 2
 		
 	#colisao para morrer encostando, incacabada	
 	#if snake.count(cabeca)>0:
