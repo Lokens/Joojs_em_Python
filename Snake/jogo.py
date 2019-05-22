@@ -38,10 +38,10 @@ LEFT = 3
 
 #corpo da cobra
 #cobra é um vetor de tuplas 
-snake = [(200,200) , (210,200) , (220,200)]
+snake = [(200,200) , (210,200) , (220,200)] #tamanho inicial da cobra
 snake_skin = pygame.Surface((10,10))
 
-CorDaCobra= (255,255,255)
+CorDaCobra = (255,255,255)
 snake_skin.fill(CorDaCobra)
 
 Direção = RIGHT
@@ -54,7 +54,7 @@ print (Velocidade)
 Pos_Comida = on_grid_random()
 CorDaComida = (0,255,0)						
 
-					#taanho da coisa
+					#tamanho da coisa
 comida = pygame.Surface((10,10))
 
 comida.fill(CorDaComida)
@@ -62,8 +62,10 @@ comida.fill(CorDaComida)
 #criação da comida que diminui a velocidade
 Pos_Comida2 = on_grid_random()
 CorDaComida2 = (255,0,0)
-comida2 = pygame.Surface((10,10))
+comida2 = pygame.Surface((30,30))
 comida2.fill(CorDaComida2)
+
+
 
 
 
@@ -99,29 +101,27 @@ while True :
 	#teclas de movimento 
 		if event.type == KEYDOWN:
 			if event.key == K_UP:
-				Direção = UP
+				if Direção != DOWN:
+					Direção = UP
 			if event.key == K_DOWN:
-				Direção = DOWN
+				if Direção != UP:
+					Direção = DOWN
 			if event.key == K_LEFT:
-				Direção = LEFT
+				if Direção != RIGHT:
+					Direção = LEFT
 			if event.key == K_RIGHT:
-				Direção = RIGHT
-			
-			#futura pausa
-			if event.key == K_p:
-				time.sleep(5)
-				print ("Foi?")
+				if Direção != LEFT:	
+					Direção = RIGHT
 			
 			
-		
-	
-	
 	
 	if Velocidade < 10:
 		Velocidade = 10
 		
 		
 	print(snake)
+		
+	# COLISOES 	
 		
 	#colisao da comida que almente a velocidade
 	if colisao(snake[0],Pos_Comida):
@@ -174,16 +174,18 @@ while True :
 	
 	
 	
-
+	#cor da tela (preto)
 	screen.fill((0,0,0))
 	
 	#comida na tela 
 	screen.blit(comida, Pos_Comida)
-	#comida2 na tela 
 	
+	#comida2 na tela 
 	#if pra pontuação minima para aparecer a comida vermelha 
 	if Pontos > 50 :
 		screen.blit(comida2, Pos_Comida2)
+	
+	
 	
 	#placar
 	#escolhe a cor do que vai ser escrito
@@ -192,17 +194,19 @@ while True :
 	#estilo e tamanho da letra
 	font = pygame.font.Font(None, 54)
 	
+	
+	
 	#oq vai ser escrito e como 
 	text = font.render(str("PONTOS : "),True ,font_color)
 	text_pontos = font.render (str(Pontos), True, font_color)
-	text_tempo = font.render (str("TEMPO : "),True, font_color)
-	text_tempo_cont = font.render (str(Tempo),True,font_color)
+	#text_tempo = font.render (str("TEMPO : "),True, font_color)
+	#text_tempo_cont = font.render (str(Tempo),True,font_color)
 	
 	#coloca o letras na tela 
 	screen.blit(text, (50 , 40))
 	screen.blit(text_pontos,(250,40))
-	screen.blit(text_tempo,(350,40))
-	screen.blit(text_tempo_cont,(400,40))
+	#screen.blit(text_tempo,(350,40))
+	#screen.blit(text_tempo_cont,(400,40))
 	
 	#pygame.draw.rect(fundoJanela,AZUL,Rect([10,120],[420,380]),1)
 	#screen.blit(fundoJanela,font_color([10,120],[420,380],1))
