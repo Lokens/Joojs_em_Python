@@ -21,13 +21,14 @@ pygame.display.set_caption('Cobrinha')
 #função pra retornar uma posição por 10
 #exemplo pra 209 -> 210
 def on_grid_random():
-	X = random.randint(10,710)
-	Y = random.randint(0,520)
+	X = random.randint(40,640)
+	Y = random.randint(100,480)
 	return (X//10 * 10, Y//10 *10)
-	
 
+	
+  
 def colisao(obj1,obj2):
-	return (obj1[0] == obj2[0]) and (obj1[1] == obj2[1])  
+	return (obj1[0] == obj2[0]) and (obj1[1] == obj2[1])
 
 	
 #direçoes
@@ -38,7 +39,8 @@ LEFT = 3
 
 #corpo da cobra
 #cobra é um vetor de tuplas 
-snake = [(200,200) , (210,200) , (220,200)] #tamanho inicial da cobra
+#snake = [(200,200) , (210,200) , (220,200)] #tamanho inicial da cobra
+snake = [(200,200)]
 snake_skin = pygame.Surface((10,10))
 
 CorDaCobra = (255,255,255)
@@ -62,7 +64,8 @@ comida.fill(CorDaComida)
 #criação da comida que diminui a velocidade
 Pos_Comida2 = on_grid_random()
 CorDaComida2 = (255,0,0)
-comida2 = pygame.Surface((30,30))
+#comida2 = pygame.Surface((30,30))
+comida2 = pygame.Surface((10,10))
 comida2.fill(CorDaComida2)
 
 
@@ -73,21 +76,21 @@ comida2.fill(CorDaComida2)
 
 Pontos = 0
 
-#tempo
-
-Tempo = time.time()
-
-
-#borda
+#Tela
 fundoJanela=pygame.display.set_mode((Largura,Altura),0,32)
 
 #fps
 FPS = pygame.time.Clock()
+comida_na_tela = 0
+
+vida = True
 
 
-while True :
+
+while vida:
 	#velocidade do game FPS
 	FPS.tick(Velocidade)
+	
 	for event in pygame.event.get():
 		if event.type == QUIT:
 			pygame.quit()
@@ -119,7 +122,7 @@ while True :
 		Velocidade = 10
 		
 		
-	print(snake)
+	#print(snake)
 		
 	# COLISOES 	
 		
@@ -132,22 +135,25 @@ while True :
 		snake.append((0,0))
 		Velocidade = Velocidade + 5
 		Pontos += 25 
-		
-		
 	
-	#colisao da comida q diminui a velocida
 	if colisao(snake[0],Pos_Comida2):
 		Pos_Comida2 = on_grid_random()
-		#novo quadrado da cobra 
-		#não importa ser 0,0 pq ela vai pegar a posição q o rabo tinha 
-		#snake.append((0,0))
 		Velocidade = 15
-		snake.pop(len(snake)-1)
+		if (len(snake) == 1 ):
+			
+			vida = False
+			
+			
+			#snake.pop(len(snake)-1)
+		else:
+		
+			for d in range (len(snake)//2):
+				snake.pop(len(snake)-1)
+		
 		Pontos  = Pontos // 2
 		
-	#colisao para morrer encostando, incacabada	
-	#if snake.count(cabeca)>0:
-        #Morto = True
+	
+	#colisao da comida q diminui a velocide
 	
 	
 	#começa a ler a cobra de traz pra frete 
@@ -182,11 +188,16 @@ while True :
 	
 	#comida2 na tela 
 	#if pra pontuação minima para aparecer a comida vermelha 
-	if Pontos > 50 :
-		screen.blit(comida2, Pos_Comida2)
 	
+	tempinho = 0.0
+	teste = []
+	#teste.append(comida2,Pos_Comida2)
 	
-	
+	if Pontos >= 0:
+		screen.blit(comida2,(Pos_Comida2))
+		
+		
+	 
 	#placar
 	#escolhe a cor do que vai ser escrito
 	font_color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
@@ -199,17 +210,30 @@ while True :
 	#oq vai ser escrito e como 
 	text = font.render(str("PONTOS : "),True ,font_color)
 	text_pontos = font.render (str(Pontos), True, font_color)
-	#text_tempo = font.render (str("TEMPO : "),True, font_color)
-	#text_tempo_cont = font.render (str(Tempo),True,font_color)
+	
+	text_velocidade = font.render (str("velocidade : "),True, font_color)
+	text_velocidade_cont = font.render (str(Velocidade),True,font_color)
 	
 	#coloca o letras na tela 
 	screen.blit(text, (50 , 40))
 	screen.blit(text_pontos,(250,40))
-	#screen.blit(text_tempo,(350,40))
-	#screen.blit(text_tempo_cont,(400,40))
 	
-	#pygame.draw.rect(fundoJanela,AZUL,Rect([10,120],[420,380]),1)
-	#screen.blit(fundoJanela,font_color([10,120],[420,380],1))
+	
+	screen.blit(text_velocidade,(350,40))
+	screen.blit(text_velocidade_cont,(590,40))
+	
+	
+	Tamanho_da_borda = [40, 100, 640, 480]
+	pygame.draw.rect(screen, font_color, Tamanho_da_borda, 5)
+	#Borda = pygame.Surface(Tamanho_da_borda)
+	#Borda.fill(font_color)
+	
+	
+	
+	
+		
+	
+	
 	
 	
 	
@@ -222,10 +246,14 @@ while True :
 			
 	pygame.display.update()
 	
-	
-	
-	
-	
+"""	
+if vida == False:
+	Game_over= font.render (str("GAME OVER"),True, CorDaComida2)
+	screen.blit(Game_over,(240,280))
+	time.sleep(5)
+"""
+
+
 	
 	
 	
