@@ -50,6 +50,9 @@ def ENDGAME():
 	Game_over= font.render (str("Pessione ESC para sair"),True, CorDaComida2)
 	screen.blit(Game_over,(150,330))
 	
+	fugiu= font.render (str("A COBRA FUGIU !!!"),True, CorDaComida2)
+	screen.blit(fugiu,(190,220))
+	
 
 
 	
@@ -108,6 +111,8 @@ comida_na_tela = 0
 while True:
 	#velocidade do game FPS
 	FPS.tick(Velocidade)
+	
+	print (snake)
 	
 	for event in pygame.event.get():
 		if event.type == QUIT:
@@ -234,7 +239,7 @@ while True:
 	pygame.draw.rect(screen, font_color, Tamanho_da_borda, 5)
 	
 	
-	print (snake)
+	
 	
 	
 	#BordaS para a colisão
@@ -244,7 +249,7 @@ while True:
 	#Colisão baixo e esquerda
 	if colisaoLado(snake[0],posX):
 		ENDGAME()
-		Velocidade = 0
+		Velocidade = 0 
 		print("A cobra fugiu")
 	
 	#colisao cima e direita
@@ -253,7 +258,6 @@ while True:
 		
 		ENDGAME()
 		Velocidade = 0
-		print("A cobra fugiu")
 		
 	for pos in snake :
 		screen.blit(snake_skin,pos)
